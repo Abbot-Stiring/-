@@ -1,84 +1,152 @@
 const animals=["🐒","🐕","🐈","🐅","🐇","🐸"]
 let selectedAnimal=[];
-let score=0;
+let coins=200;
 
 const buttons=document.querySelectorAll(".animal-btn");
 const rollBtn=document.getElementById("rollBtn");
 const diceResultDiv=document.getElementById("diceResult");
 const winnerText=document.getElementById("winner");
-const scoreText=document.getElementById("score");
+const coinText=document.getElementById("coin");
+const betInput=document.getElementById("betInput");
 
-buttons.forEach(btn=>{
-    btn.addEventListener("click",() =>{
-        const animal=btn.dataset.animal;
-       if(selectedAnimal.includes(animal)){
-        selectedAnimal=selectedAnimal.filter(a=>a!==animal);
-      btn.style.backgroundColor="";
-    }else{
-        selectedAnimal.push(animal);
-        btn.style.backgroundColor="#ffee58";
-    }
+coinText.textContent=`所持コイン:${coins}円`;
+
+const keyToEmoji = {
+    monkey: "🐒",
+    dog: "🐕",
+    cat: "🐈",
+    tiger: "🐅",
+    rabbit: "🐇",
+    frog: "🐸"
+};
+
+const emojiToKey = {
+    "🐒": "monkey",
+    "🐕": "dog",
+    "🐈": "cat",
+    "🐅": "tiger",
+    "🐇": "rabbit",
+    "🐸": "frog"
+};
+document.querySelectorAll(".animal").forEach(animalDiv=>{
+    const minusBtn=animalDiv.querySelector(".minus");
+    const plusBtn=animalDiv.querySelector(".plus");
+    const betSpan=animalDiv.querySelector(".bet");
+    const animalKey=animalDiv.dataset.animal;
+
+    plusBtn.addEventListener("click",()=>{
+        let bet=Number (betSpan.textContent);
+        if(coins>=10){
+            bet +=10;
+            coins-=10;
+            betSpan.textContent=bet;
+            coinText.textContent=`所持コイン:${coins}円`;
+        }
+    });
+
+    minusBtn.addEventListener("click",()=>{
+        let bet=Number(betSpan.textContent);
+        if(bet>=10){
+            bet-=10;
+            coins+=10;
+            betSpan.textContent=bet;
+            coinText.textContent=`所持コイン:${coins}円`;
+
+        }
+    });
 });
-});
+
+//buttons.forEach(btn=>{
+  //  btn.addEventListener("click",() =>{
+      ////  const animal=btn.dataset.animal;
+      // if(selectedAnimal.includes(animal)){
+      //  selectedAnimal=selectedAnimal.filter(a=>a!==animal);
+     // btn.style.backgroundColor="";
+    //}else{
+    //    selectedAnimal.push(animal);
+  //      btn.style.backgroundColor="#ffee58";
+    //}
+//});
+//});
 
 rollBtn.addEventListener("click",()=>{
-    if(!selectedAnimal.length ===0){
-        alert("動物をお選びください！！！");
+    const bets={};
+    document.querySelectorAll(".animal").forEach(animalDiv=>{
+        const key=animalDiv.dataset.animal;
+        const bet=Number(animalDiv.querySelector(".bet").textContent);
+        if(bet>0)bets[key]=bet;
+    });
+    if(Object.keys(bets).length===0){
+        alert("ベットをしてください！");
         return;
     }
+    //if(coins<=0){
+       // alert("コインがなくなりました！ゲーム終了です。");
+       // return;
+   // }
+    //if(!selectedAnimal.length ===0){
+       // alert("動物をお選びください！！！");
+       // return;
+   // }
+    //if(!bet||bet<=0){
+    //    alert("ベット金額を入力してください！");
+    //    return;
+    //}
+    //if(bet%10!==0){
+     //   alert("ベット金額は１０の倍数で入力してください！");
+      //  return;
+   // }
+   // if(bet * selectedAnimal.length>coins){
+       // alert("所持コインが足りません！");
+       //return;
+    //}
 
-    const diceRolls=[];
-    const counts={ monkey:0, dog:0, cat:0, tiger:0, rabbit:0, frog:0};
+
+    let diceRolls=[];
+    let counts={ monkey:0, dog:0, cat:0, tiger:0, rabbit:0, frog:0};
 
     for(let i=0;i<6;i++){
         const randomIndex=Math.floor(Math.random()*animals.length);
-        const animal=animals[randomIndex];
-        diceRolls.push(animal);
+        const emoji=animals[randomIndex];
+        diceRolls.push(emoji);
+        const key=Object.keys(keyToEmoji).find(k=>keyToEmoji[k]===emoji);
+        counts[key]++;
 
-        switch(animal){
-            case"🐒":counts.monkey++;break;
-            case"🐕":counts.dog++;break;
-            case"🐈":counts.cat++;break;
-            case"🐅":counts.tiger++;break;
-            case"🐇":counts.rabbit++;break;
-            case"🐸":counts.frog++;break;           
-        }
     }
     diceResultDiv.textContent=diceRolls.join(" ");
 
-    let maxCount=0;
-    let winner="";
-    for (let animalName in counts){
-        if (counts[animalName]>maxCount){
-            maxCount=counts[animalName];
-            winner=animalName;
+    let totalWin=0;
+    let resultText="";
+    
+   for (let key in counts){
+    const count=counts[key];
+    const emoji=keyToEmoji[key];
+    const bet=bets[key]||0
+   
+
+        if (bet>0){
+            if(count>0){
+            const win=bet*count;
+            totalWin +=win;
+            resultText += `${emoji}が${count}回出ました→+${win}円\n<br>`;   
+        }else{
+            totalWin-=bet;
+            resultText+=`${emoji}は出ませんでした→-${bet}円\n<br>`;
         }
     }
-    winnerText.textContent=`Winning Animal: ${winner.toUpperCase()} (${maxCount}times)`;
-    
-    let iswinner=false;
-    for(let animal of selectedAnimal){
-    if (
-        (animal==="🐵"&&winner==="monkey")||
-        (animal==="🐕"&&winner==="dog")||
-        (animal==="🐈"&&winner==="cat")||
-        (animal==="🐅"&&winner==="tiger")||
-        (animal==="🐇"&&winner==="rabbit")||
-        (animal==="🐸"&&winner==="frog")
-        
-    ){
-        iswinner=true;
-        break;
-    }
-    } 
-    if(iswinner){
-        score+=maxCount*10;
-        winnerText.textContent+="🎉勝です！！";
+   }
 
-    }else{
-        score-=10;
-        winnerText.textContent+="😢 負けです！！";
+    coins+=totalWin;
+    coinText.textContent=`所持コイン:${coins}円`;
+    winnerText.innerHTML=resultText;
+
+    document.querySelectorAll(".animal .bet").forEach(span=>span.textContent="0");
+
+    if(coins<=0){
+        alert("コインがなくなりました！ゲーム終了です。");
+        rollBtn.disabled=true;
+        document.querySelectorAll(".animal button").forEach(b =>b.disabled=true);
     }
-    scoreText.textContent=score;
-   
 });
+
+    

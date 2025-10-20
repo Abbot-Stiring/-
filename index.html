@@ -8,16 +8,60 @@
 <body>
     <div class="container">
         <h1> 動物サイコロゲーム</h1>
-        <div class="bet-section">
-            <div class="animals">
-                <button class="animal-btn" data-animal="monkey">🐒</button>
-                <button class="animal-btn" data-animal="dog">🐕</button>
-                <button class="animal-btn" data-animal="cat">🐈</button>
-                <button class="animal-btn" data-animal="tiger">🐅</button>
-                <button class="animal-btn" data-animal="rabbit">🐇</button>
-                <button class="animal-btn" data-animal="frog">🐸</button>    
+
+        <div class=""score-section>
+            <h2>所持コイン</h2>
+            <p id="coin">200</p>
+        </div>
+        <div class="animals">
+            <div class="animal" data-animal="monkey">
+                <span class="emoji">🐒</span>
+                <button class="minus">-10</button>
+                <span class="bet">0</span>円
+                <button class="plus">+10</button>
             </div>
-         </div>
+        
+
+            <div class="animal" data-animal="dog">
+                <span class="emoji">🐕</span>
+                <button class="minus">-10</button>
+                <span class="bet">0</span>円
+                <button class="plus">+10</button>
+            </div>
+        
+        
+            <div class="animal" data-animal="cat">
+                <span class="emoji">🐈</span>
+                <button class="minus">-10</button>
+                <span class="bet">0</span>円
+                <button class="plus">+10</button>
+            </div>
+        
+        
+            <div class="animal" data-animal="tiger">
+                <span class="emoji">🐅</span>
+                <button class="minus">-10</button>
+                <span class="bet">0</span>円
+                <button class="plus">+10</button>
+            </div>
+        
+        
+            <div class="animal" data-animal="rabbit">
+                <span class="emoji">🐇</span>
+                <button class="minus">-10</button>
+                <span class="bet">0</span>円
+                <button class="plus">+10</button>
+            </div>
+        
+        
+            <div class="animal" data-animal="frog">
+                <span class="emoji">🐸</span>
+                <button class="minus">-10</button>
+                <span class="bet">0</span>円
+                <button class="plus">+10</button>
+            </div>
+        </div>
+        
         <button id="rollBtn">🎲 サイコロ</button>
         <div class="result-section">
             <h2>結果</h2>
@@ -25,10 +69,6 @@
             <p id="winner"></p>
          </div>
 
-        <div class="score-section">
-            <h2>スコア</h2>
-            <p id="score">0</p>
-        </div>
     </div>
 
     <script src="script.js"></script>
