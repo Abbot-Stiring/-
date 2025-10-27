@@ -167,3 +167,38 @@ button:hover{
     font-weight: bold;
     color:#2c3e50;
 }
+
+@keyframes roll{
+    0% { transform: rotate(0deg) scale(1);}
+    25% { transform: rotate(15deg) scale(1.1);}
+    50% { transform: rotate(-15deg) scale(1.1);}
+    75% { transform: rotate(10deg) scale(1.05);}
+    100% { transform: rotate(0deg) scale(1);}
+}
+.roll-animation{
+    animation: roll 3s ease-in-out;
+}
+
+.dice{
+    width: 70px;
+    height: 70px;
+    background-color: white;
+    border: 3px solid #ccc;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+    transition: transform 0.3s;
+}
+.dice.roll{
+    animation: rollDice 0.5s ease-in-out;
+}
+@keyframes rollDice{
+    0% { transform: rotate(0deg) scale(1);}
+    25% { transform: rotate(15deg) scale(1.1);}
+    50% { transform: rotate(-15deg) scale(1.1);}
+    75% { transform: rotate(10deg) scale(1.05);}
+    100% { transform: rotate(0deg) scale(1);}
+}

@@ -113,7 +113,8 @@ rollBtn.addEventListener("click",()=>{
         counts[key]++;
 
     }
-    diceResultDiv.textContent=diceRolls.join(" ");
+    rollAnimation(diceRolls,()=>{
+
 
     let totalWin=0;
     let resultText="";
@@ -125,8 +126,8 @@ rollBtn.addEventListener("click",()=>{
    
 
         if (bet>0){
-            if(count>0){
-            const win=bet*count;
+            if(count>=2){
+            const win=bet*count*2;
             totalWin +=win;
             resultText += `${emoji}が${count}回出ました→+${win}円\n<br>`;   
         }else{
@@ -138,6 +139,14 @@ rollBtn.addEventListener("click",()=>{
 
     coins+=totalWin;
     coinText.textContent=`所持コイン:${coins}円`;
+
+    if(totalWin>0){
+        resultText += `<hr>🙌合計勝ち額: +${totalWin}円`;
+    }else if(totalWin<0){
+        resultText += `<hr>💰 合計負け額: ${totalWin}円`;
+    }else{
+        resultText +=`<hr> 🙁合計±0円`;
+    }
     winnerText.innerHTML=resultText;
 
     document.querySelectorAll(".animal .bet").forEach(span=>span.textContent="0");
@@ -148,5 +157,26 @@ rollBtn.addEventListener("click",()=>{
         document.querySelectorAll(".animal button").forEach(b =>b.disabled=true);
     }
 });
+});
+function rollAnimation(finalDiceRolls,callback){
+    const diceResultDiv=document.getElementById("diceResult");
+    const animals=["🐒","🐕","🐈","🐅","🐇","🐸"];
+    let count=0;
+    const interval=setInterval(()=>{
+        let tempRolls=[];
+        for(let i=0;i<6;i++){
+        const randomAnimal=animals[Math.floor(Math.random()*animals.length)];
+        tempRolls.push(randomAnimal);
+        }
+        diceResultDiv.textContent=tempRolls.join(" ");
+        count++;
+        if(count>15){
+            clearInterval(interval);
+            diceResultDiv.textContent=finalDiceRolls.join(" ");
+            if(callback) callback();
+        }
+    },100);
+
+}
 
     
